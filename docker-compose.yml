@@ -4,10 +4,10 @@ version: "3"
 services:
 
   consul:
-    image: sdelrio/consul${TAG}
+    image: robwithhair/consul${TAG}
     labels: [app=consul]
     ports:
-        - "8500:8500"
+        - "8500"
     networks:
         - consul-net
     environment:
@@ -30,7 +30,7 @@ services:
         update_config:
             parallelism: 1
             delay: 10s
-            failure_action: continue
+            failure_action: rollback
 
 networks:
   consul-net:
