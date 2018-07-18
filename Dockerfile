@@ -1,4 +1,4 @@
-FROM consul
+FROM consul:1.2.1
 
 # Add Containerpilot and set its configuration
 ENV CONTAINERPILOT_VERSION 2.6.0
