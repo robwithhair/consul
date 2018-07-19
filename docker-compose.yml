@@ -1,4 +1,4 @@
-version: "3"
+version: "3.3"
 
 
 services:
@@ -7,7 +7,7 @@ services:
     image: robwithhair/consul${TAG}
     labels: [app=consul]
     ports:
-        - "8500"
+        - "8500:8500"
     networks:
         - consul-net
     environment:
@@ -15,10 +15,13 @@ services:
         - CONSUL_BIND_INTERFACE=eth0
         - CONSUL=consul
         - CONSUL_CHECK_LEADER=true
+    volumes:
+      - ${CONSUL_VOLUME}/consul/data
     deploy:
         replicas: 3
         placement:
-            constraints: [node.role == manager]
+            preferences:
+              - spread: node.labels.availability-zone
         resources:
             reservations:
                 memory: 128M
@@ -29,10 +32,12 @@ services:
             window: 120s
         update_config:
             parallelism: 1
-            delay: 10s
+            delay: 60s
             failure_action: rollback
 
 networks:
   consul-net:
     external: true
 
+volumes:
+  consul-data:
