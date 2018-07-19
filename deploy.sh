@@ -54,15 +54,17 @@ function teardown_network() {
 function deploy_to_stack() {
     check_is_set "$1" "Stack Name"
     deploy_network
+    sleep 30
     echo "Deploying stack $1 to ${MACHINE_NAME}..."
-    docker stack deploy -c ./docker-compose.yml $1
+    docker stack deploy -c ./docker-compose.yml --prune $1
 }
 
 function teardown_stack() {
     check_is_set "$1" "Stack Name"
     echo "Tearing down stack $1 on ${MACHINE_NAME}..."
-    teardown_network
     docker stack rm "$1"
+    sleep 30
+    teardown_network
 }
 
 connect_to_machine $MACHINE_NAME
